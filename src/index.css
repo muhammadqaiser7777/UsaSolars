@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@theme {
+    --color-primary: #06408f;
+    --color-secondary: #000000;
+    --color-tertiary: #ffffff;
+    --color-heading: #fe9929;
+}
+
+/* Keyframes for border animation (left to right) */
+@keyframes border-draw {
+  0% {
+    border-width: 0;
+    border-color: transparent;
+  }
+  25% {
+    border-width: 2px;
+    border-radius: 20px;
+    border-color: transparent;
+    border-left-color: #fe9929;
+  }
+  50% {
+    border-width: 2px;
+    border-radius: 20px;
+    border-left-color: #fe9929;
+    border-top-color: #fe9929;
+  }
+  75% {
+    border-width: 2px;
+    border-left-color: #fe9929;
+    border-top-color: #fe9929;
+    border-right-color: #fe9929;
+    border-radius: 20px;
+  }
+  100% {
+    border-width: 2px;
+    border-color: #fe9929;
+    border-radius: 20px;
+  }
+}
+
+
+/* Custom hover effect */
+@layer utilities {
+  .hover-animated-border {
+    position: relative;
+    display: inline-block;
+    animation-fill-mode: forwards;
+    
+  }
+
+  .hover-animated-border:hover {
+    animation: border-draw 0.7s ease-in-out forwards;
+  }
+
+  /* Heading Hover Animation */
+@layer utilities {
+    .hover-animation {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      color: var(--color-tertiary);
+      transition: color 0.5s ease-in-out; /* Smooth text color transition */
+    }
+  
+    .hover-animation::before,
+    .hover-animation::after {
+      content: "";
+      position: absolute;
+      height: 2px;
+      background-color: var(--color-heading);
+      transition: width 0.5s ease-in-out;
+    }
+  
+    /* Top border animation (right to left) */
+    .hover-animation::before {
+      top: 0;
+      right: 0;
+      width: 0;
+    }
+  
+    /* Bottom underline animation (left to right) */
+    .hover-animation::after {
+      bottom: 0;
+      left: 0;
+      width: 0;
+    }
+  
+    .hover-animation:hover::before {
+      width: 100%; /* Animate top border */
+    }
+  
+    .hover-animation:hover::after {
+      width: 100%; /* Animate bottom underline */
+    }
+  }
+}
+@layer utilities {
+  .hover-animation {
+    transition: all 0.3s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  img {
+    vertical-align: middle; /* Fixes spacing issues */
+  }
+}
+
+
