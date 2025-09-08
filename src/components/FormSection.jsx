@@ -37,7 +37,7 @@ const FormSection = () => {
     start: "",
     min: "",
     ipaddress: "",
-    userAgent: navigator.userAgent,
+    browser: "",
   });
 
   useEffect(() => {
@@ -47,6 +47,9 @@ const FormSection = () => {
         setFormData((prevData) => ({ ...prevData, ipaddress: data.ip }));
       })
       .catch((error) => console.error("Failed to fetch IP address:", error));
+
+    // Set browser info
+    setFormData((prevData) => ({ ...prevData, browser: navigator.userAgent }));
 
     // Extract aff_id, transaction_id, and sub_aff_id from query string if present
     const urlParams = new URLSearchParams(window.location.search);
@@ -809,7 +812,10 @@ const FormSection = () => {
       if (!leadIdValue) {
         newErrors.universal_leadid = "LeadiD token is required. Please wait for the page to fully load.";
       }
-
+      // Check if browser info is available
+      if (!formData.browser) {
+        newErrors.browser = "Browser information is required. Please wait for the page to load.";
+      }
     }
     fields[currentStep].forEach((field) => {
       // Only validate required fields, skip fields with empty label (like agreement)
@@ -996,6 +1002,7 @@ const FormSection = () => {
       url: window.location.href,
       universalLeadid: leadIdValue,
       ipaddress: formData.ipaddress,
+      browser: formData.browser,
       aff_id: formData.aff_id || "",
       transaction_id: formData.transaction_id || "",
       sub_aff_id: formData.sub_aff_id || "",
