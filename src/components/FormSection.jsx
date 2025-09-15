@@ -3,6 +3,178 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+// State name to abbreviation mapping
+const stateAbbrev = {
+  "Alabama": "AL",
+  "Alaska": "AK",
+  "Arizona": "AZ",
+  "Arkansas": "AR",
+  "California": "CA",
+  "Colorado": "CO",
+  "Connecticut": "CT",
+  "Delaware": "DE",
+  "Florida": "FL",
+  "Georgia": "GA",
+  "Hawaii": "HI",
+  "Idaho": "ID",
+  "Illinois": "IL",
+  "Indiana": "IN",
+  "Iowa": "IA",
+  "Kansas": "KS",
+  "Kentucky": "KY",
+  "Louisiana": "LA",
+  "Maine": "ME",
+  "Maryland": "MD",
+  "Massachusetts": "MA",
+  "Michigan": "MI",
+  "Minnesota": "MN",
+  "Mississippi": "MS",
+  "Missouri": "MO",
+  "Montana": "MT",
+  "Nebraska": "NE",
+  "Nevada": "NV",
+  "New Hampshire": "NH",
+  "New Jersey": "NJ",
+  "New Mexico": "NM",
+  "New York": "NY",
+  "North Carolina": "NC",
+  "North Dakota": "ND",
+  "Ohio": "OH",
+  "Oklahoma": "OK",
+  "Oregon": "OR",
+  "Pennsylvania": "PA",
+  "Rhode Island": "RI",
+  "South Carolina": "SC",
+  "South Dakota": "SD",
+  "Tennessee": "TN",
+  "Texas": "TX",
+  "Utah": "UT",
+  "Vermont": "VT",
+  "Virginia": "VA",
+  "Washington": "WA",
+  "West Virginia": "WV",
+  "Wisconsin": "WI",
+  "Wyoming": "WY",
+  "Washington DC": "DC",
+  "Puerto Rico": "PR",
+  "Virgin Islands": "VI",
+};
+
+const areaCodesUS = [
+  // Alabama
+  205, 251, 256, 334, 659,
+  // Alaska
+  907,
+  // Arizona
+  480, 520, 602, 623, 928,
+  // Arkansas
+  479, 501, 870,
+  // California
+  209, 213, 279, 310, 323, 341, 408, 415, 424, 442, 510, 530, 559,
+  562, 619, 626, 650, 657, 661, 669, 707, 714, 747, 760, 805, 818,
+  820, 831, 858, 909, 916, 925, 949, 951, 628,
+  // Colorado
+  303, 719, 720, 970,
+  // Connecticut
+  203, 475, 860, 959,
+  // Delaware
+  302,
+  // District of Columbia
+  202,
+  // Florida
+  239, 305, 321, 352, 386, 407, 561, 689, 727, 754, 772, 786,
+  813, 850, 863, 904, 941, 954,
+  // Georgia
+  229, 404, 470, 478, 678, 706, 762, 770, 912,
+  // Hawaii
+  808,
+  // Idaho
+  208, 986,
+  // Illinois
+  217, 224, 309, 312, 331, 464, 618, 630, 708, 773, 815, 847, 872,
+  // Indiana
+  219, 260, 317, 463, 574, 765, 812, 930,
+  // Iowa
+  319, 515, 563, 641, 712,
+  // Kansas
+  316, 620, 785, 913,
+  // Kentucky
+  270, 364, 502, 606, 859,
+  // Louisiana
+  225, 318, 337, 504, 985,
+  // Maine
+  207,
+  // Maryland
+  240, 301, 410, 443, 667,
+  // Massachusetts
+  339, 351, 413, 508, 617, 774, 781, 857, 978,
+  // Michigan
+  231, 248, 269, 313, 517, 586, 616, 734, 810, 906, 947, 989,
+  // Minnesota
+  218, 320, 507, 612, 651, 763, 952,
+  // Mississippi
+  228, 601, 662, 769,
+  // Missouri
+  314, 417, 573, 636, 660, 816,
+  // Montana
+  406,
+  // Nebraska
+  308, 402, 531,
+  // Nevada
+  702, 725, 775,
+  // New Hampshire
+  603,
+  // New Jersey
+  201, 551, 609, 640, 732, 848, 856, 862, 908, 973,
+  // New Mexico
+  505, 575,
+  // New York
+  212, 315, 332, 347, 516, 518, 585, 607, 631, 646, 716,
+  718, 838, 845, 914, 917, 929, 934,
+  // North Carolina
+  252, 336, 704, 743, 828, 910, 919, 980, 984,
+  // North Dakota
+  701,
+  // Ohio
+  216, 220, 234, 330, 380, 419, 440, 513, 567, 614, 740, 937,
+  // Oklahoma
+  405, 539, 580, 918,
+  // Oregon
+  458, 503, 541, 971,
+  // Pennsylvania
+  215, 223, 267, 272, 412, 445, 484, 570, 610, 717, 724, 814, 878,
+  // Rhode Island
+  401,
+  // South Carolina
+  803, 839, 843, 854, 864,
+  // South Dakota
+  605,
+  // Tennessee
+  423, 615, 629, 731, 865, 901, 931,
+  // Texas
+  210, 214, 254, 281, 325, 346, 361, 409, 430, 432, 469, 512,
+  682, 713, 726, 737, 806, 817, 830, 832, 903, 915, 936, 940,
+  945, 956, 972, 979,
+  // Utah
+  385, 435, 801,
+  // Vermont
+  802,
+  // Virginia
+  276, 434, 540, 571, 703, 757, 804, 826, 948,
+  // Washington
+  206, 253, 360, 425, 509, 564,
+  // West Virginia
+  304, 681,
+  // Wisconsin
+  262, 414, 534, 608, 715, 920,
+  // Wyoming
+  307,
+  // Puerto Rico
+  787, 939,
+  // U.S. Virgin Islands
+  340
+];
+
 const FormSection = () => {
   const [submitError, setSubmitError] = useState("");
   const [agreementError, setAgreementError] = useState("");
@@ -11,6 +183,8 @@ const FormSection = () => {
   const [trustedFormCertUrl, setTrustedFormCertUrl] = useState("");
 
   const [imageLoaded, setImageLoaded] = useState(false);
+  // Track LeadiD token
+  // (already declared below, removed duplicate)
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     currencyBill: "",
@@ -30,9 +204,9 @@ const FormSection = () => {
     bestTimeToCall: "",
     serviceRequirements: "",
     agreement: false,
-    affid: "",
-    rid: "",
-    tid: "",
+    aff_id: "",
+    transaction_id: "",
+    sub_aff_id: "",
     url: window.location.href,
     start: "",
     min: "",
@@ -41,12 +215,21 @@ const FormSection = () => {
   });
 
   useEffect(() => {
+    // Fetch user's IP and region on first load
     fetch("https://api.ipify.org?format=json")
       .then((response) => response.json())
       .then((data) => {
         setFormData((prevData) => ({ ...prevData, ipaddress: data.ip }));
+        // Now fetch region for this IP
+        fetch(`https://ipapi.co/${data.ip}/json/`)
+          .then((res) => res.json())
+          .then((regionData) => {
+            setIpState(regionData.region || "");
+          })
+          .catch(() => {
+            setIpState("");
+          });
       })
-      .catch((error) => console.error("Failed to fetch IP address:", error));
 
     // Set browser info
     setFormData((prevData) => ({ ...prevData, browser: navigator.userAgent }));
@@ -108,7 +291,7 @@ const FormSection = () => {
         let token = '';
         try {
           token = window.LeadiD && window.LeadiD.getToken ? window.LeadiD.getToken() : '';
-        } catch (e) {
+        } catch {
           // ignore
         }
         // Set token in hidden input field
@@ -155,6 +338,13 @@ const FormSection = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
+  const [validatingZip] = useState(false); // Remove unused setter
+  const [zipValid, setZipValid] = useState(false);
+  const [ipState, setIpState] = useState("");
+  const [ipStateCheckLoading, setIpStateCheckLoading] = useState(false);
+  const [ipStateValidForSubmit, setIpStateValidForSubmit] = useState(true);
+  const [zipCheckLoading, setZipCheckLoading] = useState(false);
+  const [emailCheckLoading, setEmailCheckLoading] = useState(false);
 
   const fields = [
     [
@@ -172,6 +362,7 @@ const FormSection = () => {
           "600$",
           "700$",
           "800$",
+          "900$",
           "More than 900$",
         ],
       },
@@ -693,68 +884,72 @@ const FormSection = () => {
       { id: "phone", label: "Phone Number", type: "tel" },
     ],
     [
-      { id: "address", label: "Address", type: "text" },
-      { id: "city", label: "City", type: "text" },
-    ],
-    [
       {
         id: "state",
         label: "State",
         type: "select",
         options: [
-          "Alabama",
-          "Alaska",
-          "Arizona",
-          "Arkansas",
-          "California",
-          "Colorado",
-          "Connecticut",
-          "Delaware",
-          "Florida",
-          "Georgia",
-          "Hawaii",
-          "Idaho",
-          "Illinois",
-          "Indiana",
-          "Iowa",
-          "Kansas",
-          "Kentucky",
-          "Louisiana",
-          "Maine",
-          "Maryland",
-          "Massachusetts",
-          "Michigan",
-          "Minnesota",
-          "Mississippi",
-          "Missouri",
-          "Montana",
-          "Nebraska",
-          "Nevada",
-          "New Hampshire",
-          "New Jersey",
-          "New Mexico",
-          "New York",
-          "North Carolina",
-          "North Dakota",
-          "Ohio",
-          "Oklahoma",
-          "Oregon",
-          "Pennsylvania",
-          "Rhode Island",
-          "South Carolina",
-          "South Dakota",
-          "Tennessee",
-          "Texas",
-          "Utah",
-          "Vermont",
-          "Virginia",
-          "Washington",
-          "West Virginia",
-          "Wisconsin",
-          "Wyoming",
-        ],
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
+  "Washington DC",
+  "Puerto Rico",
+  "Virgin Islands",
+],
+
       },
       { id: "zipCode", label: "Zip Code", type: "text" },
+    ],
+    [
+      { id: "address", label: "Address", type: "text" },
+      { id: "city", label: "City", type: "text" },
     ],
     [
       {
@@ -810,7 +1005,7 @@ const FormSection = () => {
       const leadIdInput = document.getElementById('leadid_token');
       const leadIdValue = leadIdInput ? leadIdInput.value : universalLeadid;
       if (!leadIdValue) {
-        newErrors.universal_leadid = "LeadiD token is required. Please wait for the page to fully load.";
+        newErrors.universalLeadid = "LeadiD token is required. Please wait for the page to fully load.";
       }
       // Check if browser info is available
       if (!formData.browser) {
@@ -830,6 +1025,11 @@ const FormSection = () => {
       if (field.id === "phone") {
         if (formData.phone.length !== 10) {
           newErrors.phone = "Phone number must be exactly 10 digits";
+        } else {
+          const areaCode = parseInt(formData.phone.substring(0, 3));
+          if (!areaCodesUS.includes(areaCode)) {
+            newErrors.phone = "Invalid area code";
+          }
         }
       }
       if (
@@ -875,7 +1075,165 @@ const FormSection = () => {
     setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
   };
 
-  const handleNext = () => {
+
+  useEffect(() => {
+    // Run zip API only when both state and zipCode are present and non-empty, and ipState is empty
+    if (formData.state && formData.zipCode && formData.zipCode.length === 5 && !ipState) {
+      fetch(`https://steermarketeer.com/api/a9f3b2c1e7d4?zip=${formData.zipCode}`)
+        .then(res => res.json())
+    }
+  }, [formData.state, formData.zipCode, ipState]);
+
+  const handleNext = async () => {
+    // Zip validation step (step 4: state/zip)
+    if (currentStep === 4) {
+      setZipCheckLoading(true);
+      if (formData.state && formData.zipCode && formData.zipCode.length === 5) {
+        try {
+          // Validate zip/state match
+          const res = await fetch(`https://steermarketeer.com/api/a9f3b2c1e7d4?zip=${formData.zipCode}`);
+          const data = await res.json();
+
+          // Only proceed to Zippopotam if zip/state match
+          if (data.state_name === formData.state) {
+            setZipValid(true);
+            setErrors(prev => ({ ...prev, zipCode: undefined }));
+
+            // Fetch city from Zippopotam API
+            try {
+              const zippoRes = await fetch(`https://api.zippopotam.us/us/${formData.zipCode}`);
+              if (zippoRes.ok) {
+                const zippoData = await zippoRes.json();
+                if (zippoData.places && zippoData.places.length > 0) {
+                  const cityFromZip = zippoData.places[0]["place name"];
+                  setFormData(prev => ({ ...prev, city: cityFromZip }));
+                } else {
+                  setFormData(prev => ({ ...prev, city: "" }));
+                }
+              } else {
+                setFormData(prev => ({ ...prev, city: "" }));
+              }
+            } catch {
+              setFormData(prev => ({ ...prev, city: "" }));
+              // Do not show any error, just leave city empty
+            }
+
+            setZipCheckLoading(false);
+            setCurrentStep(currentStep + 1);
+          } else {
+            setZipValid(false);
+            setErrors(prev => ({ ...prev, zipCode: `Invalid Zip` }));
+            setZipCheckLoading(false);
+            return;
+          }
+          if (data.zip_state === 'Not US') {
+            setZipValid(false);
+            setErrors(prev => ({ ...prev, zipCode: "Invalid Zip (Not US)" }));
+            setZipCheckLoading(false);
+            return;
+          }
+        } catch {
+          setZipValid(false);
+          setErrors(prev => ({ ...prev, zipCode: "Invalid Zip" }));
+          setZipCheckLoading(false);
+          return;
+        }
+      } else {
+        setZipValid(false);
+        setErrors(prev => ({ ...prev, zipCode: "Invalid Zip (missing state or zip)" }));
+        setZipCheckLoading(false);
+        return;
+      }
+      return;
+    }
+    // Phone and email validation step (step 3)
+    if (currentStep === 3) {
+      setEmailCheckLoading(true);
+      // First, validate phone
+      const phone = formData.phone;
+      if (phone.length !== 10) {
+        setErrors(prev => ({ ...prev, phone: "Phone number must be exactly 10 digits" }));
+        setEmailCheckLoading(false);
+        return;
+      }
+      const areaCode = parseInt(phone.substring(0, 3));
+      if (!areaCodesUS.includes(areaCode)) {
+        setErrors(prev => ({ ...prev, phone: "Invalid area code" }));
+        setEmailCheckLoading(false);
+        return;
+      }
+      // Clear phone error
+      setErrors(prev => ({ ...prev, phone: undefined }));
+      // Now, validate email
+      const email = formData.email;
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setErrors(prev => ({ ...prev, email: "Invalid email format" }));
+        setEmailCheckLoading(false);
+        return;
+      }
+      const domain = email.split('@')[1];
+      if (!domain) {
+        setErrors(prev => ({ ...prev, email: "Invalid email" }));
+        setEmailCheckLoading(false);
+        return;
+      }
+      try {
+        const res = await fetch(`https://8.8.8.8/resolve?name=${domain}&type=MX`);
+        const data = await res.json();
+        if (data.Status === 3) {
+          setErrors(prev => ({ ...prev, email: "Invalid email" }));
+          setEmailCheckLoading(false);
+          return;
+        } else {
+          setErrors(prev => ({ ...prev, email: undefined }));
+          setEmailCheckLoading(false);
+          setCurrentStep(currentStep + 1);
+        }
+      } catch (error) {
+        console.error('Email validation error:', error);
+        setErrors(prev => ({ ...prev, email: "Unable to validate email" }));
+        setEmailCheckLoading(false);
+        setCurrentStep(currentStep + 1);
+        return;
+      }
+      return;
+    }
+    // IP state validation step (2nd last step)
+    if (currentStep === fields.length - 2) {
+      setIpStateCheckLoading(true);
+      // Validate IP country using country_code from API
+      if (formData.ipaddress) {
+        try {
+          const res = await fetch(`https://ipapi.co/${formData.ipaddress}/json/`);
+          const regionData = await res.json();
+          if (regionData.country_code === "US") {
+            setIpStateValidForSubmit(true);
+            sessionStorage.setItem('ipStateValidForSubmit', 'true');
+            setSubmitError(""); // Clear any previous error
+          } else {
+            setIpStateValidForSubmit(false);
+            sessionStorage.setItem('ipStateValidForSubmit', 'false');
+            setSubmitError("This service is only for US citizens.");
+          }
+        } catch {
+          setIpStateValidForSubmit(false);
+          sessionStorage.setItem('ipStateValidForSubmit', 'false');
+          setSubmitError("Unable to verify your location. This service is only for US citizens.");
+        }
+      } else {
+        setIpStateValidForSubmit(false);
+        sessionStorage.setItem('ipStateValidForSubmit', 'false');
+        setSubmitError("Unable to verify your location. This service is only for US citizens.");
+      }
+      setTimeout(() => {
+        setIpStateCheckLoading(false);
+        if (ipStateValidForSubmit) {
+          setCurrentStep(currentStep + 1);
+        }
+      }, 1000); // Simulate loader
+      return;
+    }
+    // Default: validate fields and go to next step
     if (validateFields()) {
       if (currentStep < totalSteps - 1) {
         setCurrentStep(currentStep + 1);
@@ -923,14 +1281,25 @@ const FormSection = () => {
       if (field.type !== 'checkbox' && field.label && !formData[field.id]) {
         missingField = true;
       }
-      if (field.id === "zipCode" && formData.zipCode.length !== 5) {
-        missingField = true;
+      if (field.id === "zipCode") {
+        if (formData.zipCode.length !== 5) {
+          missingField = true;
+        }
       }
-      if (field.id === "phone" && formData.phone.length !== 10) {
-        missingField = true;
+      if (field.id === "phone") {
+        if (formData.phone.length !== 10) {
+          missingField = true;
+        } else {
+          const areaCode = parseInt(formData.phone.substring(0, 3));
+          if (!areaCodesUS.includes(areaCode)) {
+            missingField = true;
+          }
+        }
       }
-      if (field.id === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        missingField = true;
+      if (field.id === "email") {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          missingField = true;
+        }
       }
     });
     if (missingField) {
@@ -975,7 +1344,6 @@ const FormSection = () => {
       if (homeOwnerValue === "Yes") homeOwnerValue = 1;
       else if (homeOwnerValue === "No") homeOwnerValue = 2;
     // Map propertyType options to codes
-    const propertyTypeOptions = ["Commercial", "MultiUnit", "Residential"];
     const propertyTypeMapping = { Commercial: 1, MultiUnit: 2, Residential: 3 };
     // Get LeadiD token from input or state
     const leadIdInput = document.getElementById('leadid_token');
@@ -988,7 +1356,7 @@ const FormSection = () => {
       category: 20,
       address: formData.address,
       city: formData.city,
-      state: formData.state,
+      state: stateAbbrev[formData.state] || formData.state, // always abbreviation
       zip: formData.zipCode,
       homeOwner: homeOwnerValue,
       Propertytype: propertyTypeMapping[formData.propertyType] || "", // mapped code
@@ -1019,7 +1387,7 @@ const FormSection = () => {
             body: JSON.stringify(demoFormData),
           }
         );
-        const serverResponse = await response.text();
+        await response.text();
         setIsSubmitting(false);
         if (response.ok) {
           setFormData({
@@ -1047,12 +1415,13 @@ const FormSection = () => {
         } else {
           setSubmitError("There was an error submitting the form. Please press submit again.");
         }
-      } catch (error) {
+      } catch {
         setIsSubmitting(false);
         setSubmitError("There was an error submitting the form. Please press submit again.");
       }
     }
   };
+
 
   return (
     <div className="flex flex-col md:flex-row justify-center items-center bg-white text-secondary p-8 md:p-12 md:pt-0  shadow-lg">
@@ -1092,6 +1461,15 @@ const FormSection = () => {
 
         <form
           onSubmit={handleSubmit}
+          onKeyDown={e => {
+            if (e.key === "Enter") {
+              // Prevent default form submit on Enter
+              e.preventDefault();
+              if (currentStep < fields.length - 1) {
+                handleNext();
+              }
+            }
+          }}
           className="w-full max-w-xs sm:max-w-xl md:max-w-lg flex flex-col items-center overflow-auto"
         >
           {/* Render all fields for all steps, like the older version, but keep latest logic for zipCode, validation, and Jornaya hidden input */}
@@ -1128,6 +1506,20 @@ const FormSection = () => {
                       ...formData,
                       [field.id]: selectedValue,
                     });
+                    if (field.id === "state" && formData.zipCode.length === 5) {
+                      fetch(`https://steermarketeer.com/api/a9f3b2c1e7d4?zip=${formData.zipCode}`)
+                        .then(res => res.json())
+                        .then(data => {
+                          if (data.zip_state === selectedValue) {
+                            setZipValid(true);
+                          } else {
+                            setZipValid(false);
+                          }
+                        })
+                        .catch(() => {
+                          setZipValid(true); // Allow submission if API fails
+                        });
+                    }
                   }}
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   required
@@ -1195,6 +1587,8 @@ const FormSection = () => {
                     onChange={e => {
                       const val = e.target.value.replace(/[^0-9]/g, '').slice(0, 5);
                       setFormData({ ...formData, [field.id]: val });
+                      setErrors(prev => ({ ...prev, zipCode: undefined }));
+                      setZipValid(false);
                     }}
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     required
@@ -1274,7 +1668,7 @@ const FormSection = () => {
                   opacity: isSubmitting ? 0.6 : 1,
                   outline: '2px solid #d35400',
                 }}
-                disabled={isSubmitting}
+                disabled={isSubmitting || validatingZip || (currentStep === 4 && !zipValid)}
               >
                 Previous
               </button>
@@ -1297,16 +1691,51 @@ const FormSection = () => {
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   opacity: isSubmitting ? 0.6 : 1,
                   outline: '2px solid #d35400',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
                 }}
-                disabled={isSubmitting}
+                disabled={isSubmitting || (currentStep === 4 && zipCheckLoading) || (currentStep === 3 && emailCheckLoading)}
               >
-                Next
+                {currentStep === 3 && emailCheckLoading ? (
+                  <>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: '20px',
+                        height: '20px',
+                        border: '3px solid #d35400',
+                        borderTop: '3px solid #fff',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite',
+                      }}
+                    ></span>
+                    Validating...
+                  </>
+                ) : currentStep === 4 && zipCheckLoading ? (
+                  <>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: '20px',
+                        height: '20px',
+                        border: '3px solid #d35400',
+                        borderTop: '3px solid #fff',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite',
+                      }}
+                    ></span>
+                    Validating...
+                  </>
+                ) : (
+                  ipStateCheckLoading ? "Validating..." : "Next"
+                )}
               </button>
             ) : (
               <button
                 type="submit"
                 style={{
-                  background: '#d35400',
+                  background: (isSubmitting || !ipStateValidForSubmit || sessionStorage.getItem('ipStateValidForSubmit') === 'false') ? '#ccc' : '#d35400',
                   color: '#fff',
                   border: '2px solid #fff',
                   borderRadius: '8px',
@@ -1315,14 +1744,14 @@ const FormSection = () => {
                   marginLeft: '12px',
                   boxShadow: '0 2px 8px rgba(211,84,0,0.12)',
                   transition: 'all 0.2s',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  opacity: isSubmitting ? 0.6 : 1,
+                  cursor: (isSubmitting || !ipStateValidForSubmit || sessionStorage.getItem('ipStateValidForSubmit') === 'false') ? 'not-allowed' : 'pointer',
+                  opacity: (isSubmitting || !ipStateValidForSubmit || sessionStorage.getItem('ipStateValidForSubmit') === 'false') ? 0.6 : 1,
                   outline: '2px solid #fff',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                 }}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !ipStateValidForSubmit || sessionStorage.getItem('ipStateValidForSubmit') === 'false'}
               >
                 {isSubmitting ? (
                   <>
