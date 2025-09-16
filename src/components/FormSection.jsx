@@ -876,7 +876,7 @@ const FormSection = () => {
       },
       {
         id: "ProjectNature",
-        label: "What is the nature of your project?",
+        label: "What is the nature of your project?", type: "select",
         options: ["New", "Repair", "Replace"],
       },
     ],
