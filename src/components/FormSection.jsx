@@ -874,7 +874,13 @@ const FormSection = () => {
           "Unsure/Not Listed",
         ],
       },
+      {
+        id: "ProjectNature",
+        label: "What is the nature of your project?",
+        options: ["New", "Repair", "Replace"],
+      },
     ],
+
     [
       { id: "firstName", label: "First Name", type: "text" },
       { id: "lastName", label: "Last Name", type: "text" },
@@ -1255,6 +1261,10 @@ const FormSection = () => {
       "Afternoon",
       "Evening",
     ];
+    const projectNatureOptions = ["New", "Repair", "Replace"];
+    projectNatureOptions.forEach((option, idx) => {
+        formData.ProjectNature = idx + 1; // Map to 1, 2, 3
+    });
     const bestTimeToCallMapping = {};
     bestTimeToCallOptions.forEach((option, idx) => {
       bestTimeToCallMapping[option] = idx + 1;
@@ -1364,6 +1374,7 @@ const FormSection = () => {
       SolarCurrencyBill: currencyBillMapping[formData.currencyBill] || "", // mapped code
       HowMuchSun: sunExposureMapping[formData.sunExposure] || "", // mapped code
       ElectricalEnergyProvider: formData.energyProvider || "",
+      ProjectNature: formData.ProjectNature || "",
       Purchasetimeframe: purchaseTimeFrameMapping[formData.purchaseTimeFrame] || "",
       Timetocall: bestTimeToCallMapping[formData.bestTimeToCall] || "",
       xxTrustedFormCertUrl: trustedFormCertUrl,
