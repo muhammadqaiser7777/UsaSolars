@@ -1185,7 +1185,7 @@ const FormSection = () => {
                     required
                   />
                   {providerSuggestions.length > 0 && (
-                    <ul className="border rounded mt-1 max-h-40 overflow-y-auto bg-white">
+                    <ul className="border rounded mt-1 max-h-40 overflow-y-auto bg-white" style={{ WebkitOverflowScrolling: 'touch' }}>
                       {providerSuggestions.map((prov) => (
                         <li
                           key={prov.id}
