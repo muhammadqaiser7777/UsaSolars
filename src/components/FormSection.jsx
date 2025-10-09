@@ -1202,9 +1202,6 @@ const FormSection = () => {
                       ))}
                     </ul>
                   )}
-                  {selectedProvider && (
-                    <p className="text-xs mt-1 text-gray-600">Provider ID: {selectedProvider.id}</p>
-                  )}
                 </div>
               ) : (
                 field.id === "zipCode" ? (
