@@ -26,7 +26,7 @@ const Contact = () => {
                 ></path>
               </svg>
               <span>
-                1500 Cehstnut St. Philadelphia, PA 19102 United States
+                8 The Green Street B Kent, DE, Dover, 19901, United States
               </span>
             </p>
             {/* <p className="flex items-center">
