@@ -629,7 +629,7 @@ const CaliforniaPrivacyNotice = () => {
         your choices and rights regarding such use, or wish to exercise your
         rights under California law, please do not hesitate to contact us at:
         <span className="font-bold">Email:</span> usasolars.com Postal Address:
-        usasolars.com, 1500 Cehstnut St, Philadelphia, PA 19102
+        usasolars.com, 8 The Green Street B, Kent, DE, Dover, 19901, United States
       </div>
     </div>
   );

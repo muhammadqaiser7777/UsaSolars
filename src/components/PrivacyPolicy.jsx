@@ -452,8 +452,8 @@ const PrivacyPolicy = () => {
         <h1 className="font-bold text-2xl">Contact Information</h1>
         <p>
           <h4 className="font-bold">Email:</h4> info@usasolars.com
-          <h4 className="font-bold">Address:</h4> 1500 Cehstnut St.
-          Philadelphia, PA, 19102 If you have any comments or questions
+          <h4 className="font-bold">Address:</h4> 8 The Green Street B, Kent, DE, Dover, 19901, United States 
+          If you have any comments or questions
           regarding our Privacy Policy, or to report abuse of any personal
           information collected under this Privacy Policy, please email us at
           info@usasolars.com For more information about protecting your privacy,
