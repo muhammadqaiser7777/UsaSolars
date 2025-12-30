@@ -773,35 +773,13 @@ const FormSection = () => {
     // IP state validation step (2nd last step)
     if (currentStep === fields.length - 2) {
       setIpStateCheckLoading(true);
-      // Validate IP country using country_code from API
-      if (formData.ipaddress) {
-        try {
-          const res = await fetch(`https://ipapi.co/${formData.ipaddress}/json/`);
-          const regionData = await res.json();
-          if (regionData.country_code === "US") {
-            setIpStateValidForSubmit(true);
-            sessionStorage.setItem('ipStateValidForSubmit', 'true');
-            setSubmitError(""); // Clear any previous error
-          } else {
-            setIpStateValidForSubmit(false);
-            sessionStorage.setItem('ipStateValidForSubmit', 'false');
-            setSubmitError("This service is only for US citizens.");
-          }
-        } catch {
-          setIpStateValidForSubmit(false);
-          sessionStorage.setItem('ipStateValidForSubmit', 'false');
-          setSubmitError("Unable to verify your location. This service is only for US citizens.");
-        }
-      } else {
-        setIpStateValidForSubmit(false);
-        sessionStorage.setItem('ipStateValidForSubmit', 'false');
-        setSubmitError("Unable to verify your location. This service is only for US citizens.");
-      }
+      // Allow submission regardless of IP location
+      setIpStateValidForSubmit(true);
+      sessionStorage.setItem('ipStateValidForSubmit', 'true');
+      setSubmitError(""); // Clear any previous error
       setTimeout(() => {
         setIpStateCheckLoading(false);
-        if (ipStateValidForSubmit) {
-          setCurrentStep(currentStep + 1);
-        }
+        setCurrentStep(currentStep + 1);
       }, 1000); // Simulate loader
       return;
     }
