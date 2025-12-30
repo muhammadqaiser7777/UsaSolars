@@ -953,10 +953,11 @@ const FormSection = () => {
       transaction_id: formData.transaction_id || "",
       sub_aff_id: formData.sub_aff_id || "",
       TcpaText: "By providing my phone number, I consent to receive marketing calls and/or text messages, including from automated systems, at the phone number provided, from Get Local Contractors and its affiliates. I understand that consent is not required for purchase. I also understand that message and data rates may apply. I can revoke my consent at any time by replying “STOP” to any text message or contacting PingTree Systems directly. For more information, please refer to PTS's Privacy Policy.",
+      formType: 'solar',
     };
       try {
         const response = await fetch(
-          "https://usasolars.com/api/ping-proxy.php",
+          "https://usasolars.com/server/forward-lead",
           {
             method: "POST",
             headers: {
