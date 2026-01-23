@@ -1105,15 +1105,16 @@ const FormSection = () => {
               ) : field.type === "checkbox" ? (
                 <div className="flex flex-col gap-1">
                   <div className="flex items-start gap-2">
+                  <label>
                     <input
                       type="checkbox"
-                      id={field.id}
+                      id="leadid_tcpa_disclosure"
                       name={field.id}
                       checked={formData[field.id]}
                       onChange={handleChange}
                       className="mt-1"
                     />
-                    <label htmlFor={field.id} className="text-sm text-justify">
+                    <label htmlFor="leadid_tcpa_disclosure" className="text-sm text-justify">
                       By clicking, I agree to the{" "}
                       <Link to="/user-terms" className="underline text-primary">
                         Terms of Service
@@ -1135,6 +1136,7 @@ const FormSection = () => {
                       consent is not a condition of purchase, and I may revoke
                       that consent at any time. Mobile and data charges may apply.
                       California Residents.
+                    </label>
                     </label>
                   </div>
                   {/* No inline error for agreement checkbox, handled as popup on submit */}
